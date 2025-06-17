@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.mavendb</groupId>
+    <artifactId>mavendb</artifactId>
+    <version>5.0</version>
+    <packaging>jar</packaging>
+
+    <name>mavendb</name>
+    <description>Store Maven Index into database</description>
+    <url>http://maven.apache.org</url>
+
+    <organization>
+        <name>Maven DB</name>
+        <url>http://www.mavendb.org/</url>
+    </organization>
+
+    <properties>
+        <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <buildnumber-maven-plugin.version>3.2.0</buildnumber-maven-plugin.version><!-- https://mvnrepository.com/artifact/org.codehaus.mojo/buildnumber-maven-plugin -->
+        <checkstyle.version>10.12.3</checkstyle.version><!-- https://mvnrepository.com/artifact/com.puppycrawl.tools/checkstyle -->
+        <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version><!-- https://mvnrepository.com/artifact/io.github.git-commit-id/git-commit-id-maven-plugin -->
+        <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
+        <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin -->
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+        <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+        <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
+        <maven-jxr-plugin.version>3.3.0</maven-jxr-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jxr-plugin -->
+        <maven-pmd-plugin.version>3.21.0</maven-pmd-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-pmd-plugin -->
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-resources-plugin -->
+        <maven-scm-publish-plugin.version>3.2.1</maven-scm-publish-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-scm-publish-plugin -->
+        <maven-surefire-report-plugin.version>3.1.2</maven-surefire-report-plugin.version><!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-report-plugin -->
+        <spotbugs-maven-plugin.version>4.7.3.5</spotbugs-maven-plugin.version><!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-maven-plugin -->
+
+        <commons-cli.version>1.5.0</commons-cli.version><!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+        <commons-codec.version>1.16.0</commons-codec.version><!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <commons-lang3.version>3.13.0</commons-lang3.version><!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <eclipselink.version>4.0.2</eclipselink.version><!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink -->
+        <gson.version>2.10.1</gson.version><!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <guice.version>6.0.0</guice.version><!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
+        <indexer-core.version>7.0.4</indexer-core.version><!-- https://mvnrepository.com/artifact/org.apache.maven.indexer/indexer-core -->
+        <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version><!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+        <mybatis.version>3.5.13</mybatis.version><!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <mysql-connector-j.version>8.2.0</mysql-connector-j.version><!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+        <org.eclipse.sisu.inject.version>0.9.0.M2</org.eclipse.sisu.inject.version><!-- https://mvnrepository.com/artifact/org.eclipse.sisu/org.eclipse.sisu.inject -->
+        <slf4j.version>2.0.9</slf4j.version><!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <spotbugs.version>4.7.3</spotbugs.version><!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs -->
+    </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/javaclassfile/mavendb</connection>
+        <developerConnection>scm:git:https://github.com/javaclassfile/mavendb</developerConnection>
+        <url>https://github.com/javaclassfile/mavendb</url>
+    </scm>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/javaclassfile/mavendb/issues</url>
+    </issueManagement>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/javaclassfile/mavendb</url>
+        </repository>
+        <site>
+            <id>github.com</id>
+            <url>scm:git:https://github.com/javaclassfile/mavendb.git</url>
+        </site>
+    </distributionManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql-connector-j.version}</version>
+            <type>jar</type>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>${commons-cli.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jakarta.persistence-api.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.indexer</groupId>
+            <artifactId>indexer-core</artifactId>
+            <version>${indexer-core.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>${eclipselink.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.sisu</groupId>
+            <artifactId>org.eclipse.sisu.inject</artifactId>
+            <version>${org.eclipse.sisu.inject.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <type>jar</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <type>jar</type>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${spotbugs.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <!-- Only include the file we want into the .jar file -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>META-INF/persistence.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
+
+            <!-- Generate git.properties -->
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>${git-commit-id-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                </configuration>
+            </plugin>
+
+            <!-- Add SCM version to manifest -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>${buildnumber-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                    <attach>true</attach>
+                    <addOutputDirectoryToResources>true</addOutputDirectoryToResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <!-- Add main-class manifest -->
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>org.mavendb.Main</mainClass>
+                        </manifest>
+
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                        </manifestEntries>
+
+                        <manifestSections>
+                            <manifestSection>
+                                <name>Versions</name>
+                                <manifestEntries>
+                                    <Implementation-Version>${project.version}</Implementation-Version>
+                                    <Implementation-SCM-Revision>${buildNumber}</Implementation-SCM-Revision>
+                                    <Implementation-SCM-Branch>${scmBranch}</Implementation-SCM-Branch>
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Java Compiler Show Deprecation and Warnings -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgument>-Xlint:unchecked</compilerArgument>
+                </configuration>
+            </plugin>
+
+            <!-- Copy properties file to Target folder -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-config</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/etc</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/etc</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-database</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/db</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/db</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-scripts</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/bin</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/bin</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Copy dependencies libraries to Target folder -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven-dependency-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Assembly library -->
+            <!-- https://stackoverflow.com/questions/33673260/override-maven-assembly-plugin-output-file-name -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven-assembly-plugin.version}</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/dist.xml</descriptor>
+                    </descriptors>
+                    <finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
+                    <outputDirectory>dist</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JavaDoc -->
+            <!-- https://maven.apache.org/plugins/maven-javadoc-plugin/index.html -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <additionalJOptions>
+                        <additionalJOption>-Xdoclint:all</additionalJOption>
+                        <additionalJOption>-Xdoclint:-missing</additionalJOption>
+                        <additionalJOption>-J-Xmx4g </additionalJOption>
+                    </additionalJOptions>
+                    <additionalOptions>-html5</additionalOptions>
+                    <detectJavaApiLink>true</detectJavaApiLink>
+                    <detectLinks>true</detectLinks>
+                    <header>Maven DB &lt;br&gt; Store Maven Repository data into Database</header>
+                    <show>private</show>
+
+                    <!-- If the detectLinks does not work, we need to add the URL here -->
+                    <links>
+                        <link>https://docs.oracle.com/en/java/javase/17/docs/api</link>
+                        <link>http://commons.apache.org/proper/commons-cli/javadocs/api-release</link>
+                        <link>https://maven.apache.org/maven-indexer/apidocs</link>
+                        <link>https://jakarta.ee/specifications/persistence/3.1/apidocs/</link>
+                        <link>https://javadoc.io/doc/com.google.code.gson/gson/latest/</link>
+                    </links>
+                </configuration>
+            </plugin>
+
+            <!-- Avoid error: Unable to locate Source XRef to link to -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+            </plugin>
+
+
+            <!-- Check Style -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>google_checks.xml</configLocation><!-- sun_checks.xml -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Spotbugs (successor of FindBugs) -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+                <dependencies>
+                    <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>${spotbugs.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <executions>
+                    <execution>
+                        <id>spotbugs</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-pmd-plugin.version}</version>
+            </plugin>
+
+            <!-- Publish maven site to github pages -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>${maven-scm-publish-plugin.version}</version>
+                <configuration>
+                    <scmBranch>gh-pages</scmBranch>
+                    <tryUpdate>true</tryUpdate>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+        <finalName>${project.name}</finalName>
+    </build>
+
+    <reporting>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-pmd-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven-surefire-report-plugin.version}</version>
+            </plugin>
+
+        </plugins>
+    </reporting>
+
+</project>
