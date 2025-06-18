@@ -8,12 +8,10 @@
       <property name="jakarta.persistence.jdbc.user" value="mavendbadmin"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="jakarta.persistence.jdbc.password" value="123456"/>
-      <property name="eclipselink.cache.type.default" value="NONE"/>
-      <!-- Does not preserve object identity and does not cache objects -->
+      <property name="eclipselink.cache.type.default" value="NONE"/><!-- Does not cache objects -->
       <property name="eclipselink.flush-clear.cache" value="Drop"/>
       <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
       <property name="eclipselink.jdbc.batch-writing.size" value="1000"/>
-      <property name="eclipselink.jdbc.bind-parameters" value="true"/>
       <property name="eclipselink.jdbc.cache-statements" value="true"/>
       <property name="eclipselink.jdbc.cache-statements.size" value="10000"/>
       <property name="eclipselink.jdbc.native-sql" value="true"/>
