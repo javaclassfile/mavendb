@@ -26,7 +26,7 @@ import org.eclipse.persistence.annotations.CacheType;
     , @NamedQuery(name = "Artifactinfo.findByUinfoMd5", query = "SELECT a FROM Artifactinfo a WHERE a.uinfoMd5 = :uinfoMd5")  // Only select one column to speed up
     , @NamedQuery(name = "Artifactinfo.findByMajorVersion", query = "SELECT a FROM Artifactinfo a WHERE a.majorVersion = :majorVersion")
 })
-@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
+@SuppressFBWarnings({"EI_EXPOSE_REP2"})
 public class Artifactinfo implements Serializable {
 
     private static final long serialVersionUID = 1L;

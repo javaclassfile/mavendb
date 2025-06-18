@@ -110,7 +110,6 @@ public class MvnScanner {
         this.indexCreators = requireNonNull(indexCreators);
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "it is fine from main")
     public void perform(Properties repos, Properties config) throws IOException {
         this.emf = Persistence.createEntityManagerFactory(ENTITY_MANAGER_FACTORY, config);
 

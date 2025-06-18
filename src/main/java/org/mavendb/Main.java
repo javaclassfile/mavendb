@@ -1,5 +1,6 @@
 package org.mavendb;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.google.inject.Guice;
 import java.io.BufferedReader;
 import java.io.File;
@@ -190,6 +191,7 @@ public class Main {
         /**
          * Command line option: Maven Repos name to scan, like central, spring.
          */
+        @SuppressWarnings(value="UUF_UNUSED_FIELD")
         private static final Option OPTION_RESPOSNAME = new Option("r", OPTION_REPOSNAME_LONGOPT, true, "Maven Repos name to scan, like central, spring; the name will match to the config file at etc/repos-<the name>.properties. Example values: central, spring");
         /**
          * Command line option: print help information.

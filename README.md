@@ -11,7 +11,7 @@ Requriments
 
 Build the Source Code
 * (Optional) Delete current data - `rm -rf dist/ target/`
-* `mvn clean package install dependency:tree org.codehaus.mojo:versions-maven-plugin:2.16.0:display-dependency-updates`
+* `mvn clean package install`
 
 How to Run the Tool
 * There will be an `zip` file generated inside `dist` folder, Unzip the file
@@ -103,7 +103,16 @@ Step 3. Access The data
     - `artifact_id`: `commons-lang3`
 
 
-## Publish Site (Internal Only)
+## Internal Only
+### Development
+
+Generate javadoc
+* `mvn javadoc:javadoc`
+
+Upgrade 3rd party libs
+* `mvn dependency:tree org.codehaus.mojo:versions-maven-plugin:2.18.0:display-dependency-updates`
+
+### Publish Site
 
 Maven Settings
 * Edit `conf/settings.xml`
