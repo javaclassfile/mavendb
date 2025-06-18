@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3-eclipse-temurin-17 AS build
+FROM maven:3-eclipse-temurin-21 AS build
 
 COPY .git    /app/.git
 COPY pom.xml /app/
@@ -9,7 +9,7 @@ RUN  apt install git
 RUN  cd /app && mvn clean package
 
 # Run stage
-FROM eclipse-temurin:17
+FROM eclipse-temurin:21
 
 ENV MAVENDB_MYSQL_HOST=localhost
 ENV MAVENDB_MYSQL_PORT=3306

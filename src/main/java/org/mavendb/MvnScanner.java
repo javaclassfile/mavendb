@@ -43,6 +43,7 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.MultiBits;
+import org.apache.lucene.index.StoredFields;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.util.Bits;
 import org.apache.maven.index.ArtifactInfo;
@@ -58,7 +59,9 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 /**
- * Collection of some use cases.
+ * Scan all artifacts in maven repository.
+ *
+ * @see <a href="https://github.com/apache/maven-indexer/blob/master/indexer-examples/indexer-examples-basic/src/main/java/org/apache/maven/index/examples/BasicUsageExample.java">BasicUsageExample</a>
  */
 @Singleton
 @Named
@@ -231,11 +234,12 @@ public class MvnScanner {
             final IndexReader ir = searcher.getIndexReader();
             LOG.log(Level.INFO, "Maven maxDoc={0}", String.format("%,8d%n", ir.maxDoc()));
 
+            final StoredFields storedFields = ir.storedFields();
             Bits liveDocs = MultiBits.getLiveDocs(ir);
             int i = 0;
             for (; i < ir.maxDoc(); i++) {
                 if (liveDocs == null || liveDocs.get(i)) {
-                    final Document doc = ir.document(i);
+                    final Document doc = storedFields.document(i);
                     final ArtifactInfo ai = IndexUtils.constructArtifactInfo(doc, reposContext);
                     if (ai != null) {
                         this.add(ai);

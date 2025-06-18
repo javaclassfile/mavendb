@@ -6,7 +6,7 @@ This application will scan all `maven` repos items and store them to `MySQL` dat
 
 Requriments
 
-* OpenJDK `17` or later
+* OpenJDK `21` or later
 * Maven `3.9.3` or later
 
 Build the Source Code
