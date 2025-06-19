@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   mavendbnet:
     driver: bridge
@@ -11,10 +9,10 @@ services:
     image: mysql:8
     # Buffer Pool Settings based on OS RAM Size
     #   OS RAM :  innodb_buffer_pool_size , innodb_buffer_pool_instances
-    #    16 GB                        10G , 10
-    #    32 GB                        20G , 20
-    #    64 GB                        40G , 20
-    #   128 GB                        80G , 20
+    #    16 GB                        10G , 2
+    #    32 GB                        20G , 2
+    #    64 GB                        40G , 2
+    #   128 GB                        80G , 2
     command:
       --bulk_insert_buffer_size=128M
       --character-set-server=utf8mb4
@@ -22,7 +20,7 @@ services:
       --default-time-zone='+00:00'
       --disable-log-bin
       --group_concat_max_len=52428800
-      --innodb_buffer_pool_instances=20
+      --innodb_buffer_pool_instances=2
       --innodb_buffer_pool_size=40G
       --innodb_doublewrite=0
       --innodb_file_per_table=1
@@ -59,6 +57,10 @@ services:
       # Where our data will be persisted
       - ./mysql-data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
+    deploy:
+      resources:
+        reservations:
+          memory: 10240M
     expose:
       # Opens port 3306 on the container inside the docker network
       - '3306'
