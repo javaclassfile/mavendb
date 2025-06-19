@@ -23,8 +23,7 @@ echo ""
 
 # Set JAVA_OPTS
 
-JAVA_OPTS=
-JAVA_OPTS="${JAVA_OPTS} \
+JAVA_OPTS=" \
  -showversion \
  -verbose:gc \
  -verbose:module \
@@ -40,9 +39,6 @@ JAVA_OPTS="${JAVA_OPTS} \
  -XX:+PrintCommandLineFlags \
  -XX:+PrintConcurrentLocks \
  -XX:+PrintNMTStatistics \
-"
-
-JAVA_OPTS="${JAVA_OPTS} \
  -XX:+DebugNonSafepoints \
  -XX:FlightRecorderOptions=repository=../log \
  -XX:StartFlightRecording=disk=true,dumponexit=true,filename=../log/profile.jfr,name=Profiling,settings=profile \
