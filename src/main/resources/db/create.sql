@@ -32,6 +32,11 @@ CREATE TABLE         `gav` (
   `artifact_id`                 varchar(254)  COLLATE utf8mb4_bin     NOT NULL COMMENT 'From [artifactinfo]-`json->>"$.artifactId"`',      -- 2023.02.12  Max 87
   `artifact_version`            varchar(128)  COLLATE utf8mb4_bin     NOT NULL COMMENT 'From [artifactinfo]-`json->>"$.version"`',         -- 2023.02.12  Max 94
 
+  `file_name`                   varchar(512)  COLLATE utf8mb4_bin  GENERATED ALWAYS AS (LEFT( if( isnull(classifier),
+                                                                      concat(artifact_id, '-', artifact_version, '.', file_extension),
+                                                                      concat(artifact_id, '-', artifact_version, '-', classifier, '.', file_extension)), 512)) virtual
+                                                                      NOT NULL COMMENT 'MVN file name',
+
   `major_version`                   int                           DEFAULT NULL COMMENT 'From [artifactinfo]-`major_version`',
   `version_seq`                  bigint                               NOT NULL COMMENT 'From [artifactinfo]-`version_seq`',
 
@@ -51,7 +56,8 @@ CREATE TABLE         `gav` (
   `description`                 MEDIUMTEXT    COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'From [artifactinfo]-`json->>"$.description"`',     -- 2023.02.12  Max 53,221
 
   PRIMARY KEY (`uinfo_md5`),
-  KEY `index_gav` (`group_id`,`artifact_id`,`artifact_version`)
+  KEY `index_gav` (`group_id`,`artifact_id`,`artifact_version`),
+  KEY `index_fname` (`file_name`)
 ) ENGINE=InnoDB COLLATE=utf8mb4_bin COMMENT='Groups Artifact Version';
 
 
@@ -94,8 +100,8 @@ CREATE TABLE         `ga` (
 -- Views
 --
 
-DROP VIEW IF EXISTS v_ga2ga;
-CREATE VIEW v_ga2ga AS
+DROP VIEW IF EXISTS v_ga;
+CREATE VIEW v_ga AS
 SELECT
   ga.group_id,
   ga.artifact_id,
@@ -110,22 +116,22 @@ LEFT JOIN gav ai
 ;
 
 
-DROP VIEW IF EXISTS v_artifactinfo2gav;
-CREATE VIEW         v_artifactinfo2gav AS
+DROP VIEW IF EXISTS v_gav;
+CREATE VIEW         v_gav AS
 SELECT
   group_id,
   artifact_id,
   artifact_version,
+  file_name,
   major_version,
   version_seq,
   uinfo_md5                                            AS ref_md5,
   last_modified                                        AS mvn_last_modified,
-  2                                                    AS location_type,
   concat('mvn dependency:copy -U -DoutputDirectory=. -Dartifact=',
     if(isnull(classifier),
         concat(group_id, ':', artifact_id, ':', artifact_version,':', file_extension),
         concat(group_id, ':', artifact_id, ':', artifact_version,':', file_extension, ':', classifier)
-    ))                      AS location,
+    ))                                                 AS mvn_command,
   size,
   classifier,
   file_extension,
@@ -134,23 +140,4 @@ SELECT
   description
 
 FROM gav
-WHERE ( classifier is null OR classifier = 'bin' )
-  AND       file_extension    IN (select extension from binarydocjvmadm.extension)
-  AND       artifact_version  IS NOT NULL
-  AND lower(artifact_version) NOT LIKE '%alpha%'
-  AND lower(artifact_version) NOT LIKE '%beta%'
-  AND lower(artifact_version) NOT LIKE '%build%'
-  AND lower(artifact_version) NOT LIKE '%cr%'
-  AND lower(artifact_version) NOT LIKE '%custom%'
-  AND lower(artifact_version) NOT LIKE '%dev%'
-  AND lower(artifact_version) NOT LIKE '%draft%'
-  AND lower(artifact_version) NOT LIKE '%incubating%'
-  AND lower(artifact_version) NOT LIKE '%m%'
-  AND lower(artifact_version) NOT LIKE '%nightly%'
-  AND lower(artifact_version) NOT LIKE '%post%'
-  AND lower(artifact_version) NOT LIKE '%pre%'
-  AND lower(artifact_version) NOT LIKE '%preview%'
-  AND lower(artifact_version) NOT LIKE '%rc%'
-  AND lower(artifact_version) NOT LIKE '%snapshot%'
-  AND lower(artifact_version) NOT LIKE '%sp%'
 ;

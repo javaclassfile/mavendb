@@ -83,7 +83,7 @@ public class MvnScanner {
      * Utility to convert to JSON string.
      */
     private static final Gson JSON = new Gson();
-    private static final int STORE_PACKAGE_SIZE = 10000;
+    private static final int STORE_PACKAGE_SIZE = 100000;
 
     // Injections
     private final Indexer indexer;
