@@ -17,7 +17,6 @@ CREATE TABLE "ga"(
 );
 
 CREATE TABLE "gav"(
-  "uinfo"                     TEXT, 
   "group_id"                  TEXT, 
   "artifact_id"               TEXT, 
   "artifact_version"          TEXT, 
@@ -39,6 +38,5 @@ CREATE TABLE "gav"(
   "classifier_length"         INTEGER, 
   "file_extension"            TEXT, 
   "packaging"                 TEXT, 
-  "name"                      TEXT, 
-  "description"               TEXT 
+  "name"                      TEXT 
 );

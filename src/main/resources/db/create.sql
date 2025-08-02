@@ -97,22 +97,6 @@ CREATE TABLE         `ga` (
 -- Views
 --
 
-DROP VIEW IF EXISTS v_ga;
-CREATE VIEW v_ga AS
-SELECT
-  ga.group_id,
-  ga.artifact_id,
-  IFNULL(ai.name, ga.artifact_id)                      AS name,
-  IFNULL(ai.description, ga.artifact_id)               AS description
-
-FROM ga
-LEFT JOIN gav ai
-  ON  ga.group_id        = ai.group_id
-  AND ga.artifact_id     = ai.artifact_id
-  AND ga.version_seq_max = ai.version_seq
-;
-
-
 DROP VIEW IF EXISTS v_gav;
 CREATE VIEW         v_gav AS
 SELECT
