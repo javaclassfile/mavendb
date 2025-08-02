@@ -112,6 +112,41 @@ Generate javadoc
 Upgrade 3rd party libs
 * `mvn dependency:tree org.codehaus.mojo:versions-maven-plugin:2.18.0:display-dependency-updates`
 
+MySQL Docker Container
+- Come into Container
+```
+host $ sudo docker compose exec -it mavendb-mysql bash
+```
+
+- Login to MySQL, use the password defined in [.env](.env) file 
+```
+container bash-5.1# mysql -p
+```
+
+- Dump table, which need seeral minutes
+```
+container bash-5.1# mysqldump -p --tab=/var/lib/mysql-files --fields-terminated-by=',' --fields-enclosed-by='"' mavendb g
+container bash-5.1# mysqldump -p --tab=/var/lib/mysql-files --fields-terminated-by=',' --fields-enclosed-by='"' mavendb ga
+container bash-5.1# mysqldump -p --tab=/var/lib/mysql-files --fields-terminated-by=',' --fields-enclosed-by='"' mavendb gav
+
+container bash-5.1# pwd && ls -alh
+/var/lib/mysql-files
+total 26G
+
+-rw-r--r-- 1 root  root  2.4K Jul 31 2025 23:48 g.sql
+-rw-r----- 1 mysql mysql 9.3M Jul 31 2025 23:48 g.txt
+-rw-r--r-- 1 root  root  1.8K Jul 31 2025 23:49 ga.sql
+-rw-r----- 1 mysql mysql  50M Jul 31 2025 23:49 ga.txt
+-rw-r--r-- 1 root  root  4.2K Jul 31 2025 23:49 gav.sql
+-rw-r----- 1 mysql mysql  26G Jul 31 2025 23:56 gav.txt
+``
+
+Copy files out
+```
+host $ sudo docker cp mavendb-mysql:/var/lib/mysql-files/ dist
+```
+
+
 ### Publish Site
 
 Maven Settings
@@ -130,4 +165,3 @@ Maven Settings
 
 Publish site
 * `mvn clean site site:stage scm-publish:publish-scm`
-

@@ -11,8 +11,8 @@ services:
     #   OS RAM :  innodb_buffer_pool_size , innodb_buffer_pool_instances
     #    16 GB                        10G , 2
     #    32 GB                        20G , 2
-    #    64 GB                        40G , 2
-    #   128 GB                        80G , 2
+    #    64 GB                        40G , 4
+    #   128 GB                       100G , 10
     command:
       --bulk_insert_buffer_size=128M
       --character-set-server=utf8mb4
@@ -20,8 +20,8 @@ services:
       --default-time-zone='+00:00'
       --disable-log-bin
       --group_concat_max_len=52428800
-      --innodb_buffer_pool_instances=2
-      --innodb_buffer_pool_size=40G
+      --innodb_buffer_pool_instances=10
+      --innodb_buffer_pool_size=100G
       --innodb_doublewrite=0
       --innodb_file_per_table=1
       --innodb_flush_log_at_timeout=4
@@ -38,6 +38,7 @@ services:
       --long_query_time=2
       --max_connections=100
       --max_heap_table_size=5G
+      --mysql_native_password=ON
       --read_rnd_buffer_size=512M
       --slow_query_log=1
       --skip-name-resolve
@@ -53,10 +54,9 @@ services:
       # Passwords are subjected to be changed based on your requirement
       MYSQL_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-    volumes:
-      # Where our data will be persisted
-      - ./mysql-data:/var/lib/mysql
-      - ./mysql-files:/var/lib/mysql-files
+    #volumes:
+    # # Where dump data will be stored
+    #  - ./mysql-files:/var/lib/mysql-files
     deploy:
       resources:
         reservations:
@@ -96,7 +96,7 @@ services:
       PHP_CRUD_API_ADDRESS: 'mavendb-mysql'
       PHP_CRUD_API_PORT: 3306
       PHP_CRUD_API_DATABASE: 'mavendb'
-#     PHP_CRUD_API_TABLES: 'gav'
+      PHP_CRUD_API_TABLES: 'gav'
       PHP_CRUD_API_USERNAME: "${MYSQL_USER}"
       PHP_CRUD_API_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       PHP_CRUD_API_DEBUG: 1

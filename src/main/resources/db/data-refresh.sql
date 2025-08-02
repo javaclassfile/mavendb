@@ -16,8 +16,6 @@ select concat(now(), ' Started');
 --        We need to watch out the errors in case happens
 TRUNCATE TABLE gav;
 INSERT INTO    gav(
-  uinfo_md5,
-  uinfo_length,
   uinfo,
 
   group_id,
@@ -43,8 +41,6 @@ INSERT INTO    gav(
   description
 )
 SELECT
-  uinfo_md5,
-  uinfo_length,
   uinfo,
 
   json->>"$.groupId"                              AS group_id,

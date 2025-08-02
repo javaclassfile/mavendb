@@ -24,8 +24,6 @@ CREATE TABLE `artifactinfo` (
 
 DROP TABLE IF exists `gav`;
 CREATE TABLE         `gav` (
-  `uinfo_md5`                    binary(16)                           NOT NULL COMMENT 'From [artifactinfo]-`uinfo_md5`',
-  `uinfo_length`                    int                           DEFAULT NULL COMMENT 'From [artifactinfo]-`uinfo_length`',
   `uinfo`                       varchar(254)  COLLATE utf8mb4_bin     NOT NULL COMMENT 'From [artifactinfo]-`uinfo`',
 
   `group_id`                    varchar(254)  COLLATE utf8mb4_bin     NOT NULL COMMENT 'From [artifactinfo]-`json->>"$.groupId"`',         -- 2023.02.12  Max 93
@@ -55,7 +53,6 @@ CREATE TABLE         `gav` (
   `name`                        varchar(1024) COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'From [artifactinfo]-`json->>"$.name"`',            -- 2023.02.12  Max    190
   `description`                 MEDIUMTEXT    COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'From [artifactinfo]-`json->>"$.description"`',     -- 2023.02.12  Max 53,221
 
-  PRIMARY KEY (`uinfo_md5`),
   KEY `index_gav` (`group_id`,`artifact_id`,`artifact_version`),
   KEY `index_fname` (`file_name`)
 ) ENGINE=InnoDB COLLATE=utf8mb4_bin COMMENT='Groups Artifact Version';
@@ -125,7 +122,6 @@ SELECT
   file_name,
   major_version,
   version_seq,
-  uinfo_md5                                            AS ref_md5,
   last_modified                                        AS mvn_last_modified,
   concat('mvn dependency:copy -U -DoutputDirectory=. -Dartifact=',
     if(isnull(classifier),
