@@ -87,9 +87,16 @@ Step 2. Run
     - Example: on a 64GB RM Windows laptop, set `--innodb_buffer_pool_size=24G` will work for maven central scan
   - Execute script [docker-compose-run.ps1](docker-compose-run.ps1)
     - `powershell -ExecutionPolicy Bypass -File .\docker-compose-run.ps1`
-- Note. In `Sep 2023`, on a machine with `innodb_buffer_pool_size=40G`, the execution time for maven central is `5.6` hours
-  - When running, maven central has `44,758,974` artifacts.
-  - Since maven central artifacts is keep improving, so the runtime will be longer and longer
+
+Exeuction Time
+- Since maven central artifacts is keep improving, so the runtime will be longer and longer
+
+|  Time    | artifacts count  | Runtime/hour  | Notes |
+|----------|------------------|---------------|-------|
+| Sep 2023 |    `44,758,974`  |         `5.6` | innodb_buffer_pool_size=40G
+| Jul 2025 |    `76,619,430`  |        `19.1` | innodb_buffer_pool_size=100G
+| Aug 2025 |    `76,638,341`  |        `18.8` | innodb_buffer_pool_size=100G, `61,164,426` + `6,608,605`
+
 
 Step 3. Access The data
 
@@ -124,26 +131,44 @@ container bash-5.1# mysql -p
 ```
 
 - Dump table, which need seeral minutes
-```
-container bash-5.1# mysqldump -p --tab=/var/lib/mysql-files --fields-terminated-by=',' --fields-enclosed-by='"' mavendb g
-container bash-5.1# mysqldump -p --tab=/var/lib/mysql-files --fields-terminated-by=',' --fields-enclosed-by='"' mavendb ga
-container bash-5.1# mysqldump -p --tab=/var/lib/mysql-files --fields-terminated-by=',' --fields-enclosed-by='"' mavendb gav
+  - [export.sql for sqlite](src/main/resources/db/sqlite/export.sql)
+  - `name` colum may have `new line` character, we replace it with `space`
+  - `description` column is skipped for now
 
+```
 container bash-5.1# pwd && ls -alh
 /var/lib/mysql-files
 total 26G
 
--rw-r--r-- 1 root  root  2.4K Jul 31 2025 23:48 g.sql
--rw-r----- 1 mysql mysql 9.3M Jul 31 2025 23:48 g.txt
--rw-r--r-- 1 root  root  1.8K Jul 31 2025 23:49 ga.sql
--rw-r----- 1 mysql mysql  50M Jul 31 2025 23:49 ga.txt
--rw-r--r-- 1 root  root  4.2K Jul 31 2025 23:49 gav.sql
--rw-r----- 1 mysql mysql  26G Jul 31 2025 23:56 gav.txt
-``
+-rw-r----- 1 mysql mysql 9.3M Jul 31 2025 23:48 g.csv
+-rw-r----- 1 mysql mysql  50M Jul 31 2025 23:49 ga.csv
+-rw-r----- 1 mysql mysql  26G Jul 31 2025 23:56 gav.csv
+```
 
 Copy files out
 ```
 host $ sudo docker cp mavendb-mysql:/var/lib/mysql-files/ dist
+```
+
+Import to sqlite
+
+- Init
+```
+sqlite3 mavendb.sqlite
+.read create.sql
+```
+
+- Import
+```
+.mode csv
+.import g.csv g
+.import ga.csv ga
+.import gav.csv gav
+```
+
+- Index
+```
+.read index.sql
 ```
 
 

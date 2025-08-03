@@ -54,9 +54,9 @@ services:
       # Passwords are subjected to be changed based on your requirement
       MYSQL_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-    #volumes:
-    # # Where dump data will be stored
-    #  - ./mysql-files:/var/lib/mysql-files
+    volumes:
+      # Where dump data will be stored
+      - ./mysql-files:/var/lib/mysql-files
     deploy:
       resources:
         reservations:
@@ -110,7 +110,7 @@ services:
     image: mavendb/mavendb
     hostname: mavendb
     container_name: mavendb
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     environment:
